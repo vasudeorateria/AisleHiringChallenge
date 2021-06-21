@@ -18,10 +18,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import com.google.gson.JsonObject;
 import com.kjstudios.aislehiringchallenge.R;
 import com.kjstudios.aislehiringchallenge.data.remote.RetrofitClient;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -82,22 +82,27 @@ public class PhoneNumberFragment extends Fragment {
             String countryCode = countryCode_tv.getText().toString();
             String phoneNumber = phone_number_et.getText().toString();
 
-            Call<ResponseBody> call = RetrofitClient
+            Call<JsonObject> call = RetrofitClient
                     .getInstance()
                     .getApiEndpoint()
                     .getOtp(countryCode + phoneNumber);
 
-            call.enqueue(new Callback<ResponseBody>() {
+            call.enqueue(new Callback<JsonObject>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    Toast.makeText(getContext(), "otp sent", Toast.LENGTH_SHORT).show();
-                    NavDirections action = PhoneNumberFragmentDirections
-                            .actionPhoneNumberFragmentToOtpFragment(countryCode, phoneNumber);
-                    Navigation.findNavController(view).navigate(action);
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    boolean status = response.body().get("status").getAsBoolean();
+                    if (status) {
+                        Toast.makeText(getContext(), "otp sent", Toast.LENGTH_SHORT).show();
+                        NavDirections action = PhoneNumberFragmentDirections
+                                .actionPhoneNumberFragmentToOtpFragment(countryCode, phoneNumber);
+                        Navigation.findNavController(view).navigate(action);
+                    } else {
+                        Toast.makeText(getContext(), "unable to send otp", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                public void onFailure(Call<JsonObject> call, Throwable t) {
                     continue_phone_number.setEnabled(true);
                     Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                 }

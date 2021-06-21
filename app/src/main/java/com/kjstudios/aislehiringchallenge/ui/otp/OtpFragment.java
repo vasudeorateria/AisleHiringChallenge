@@ -22,7 +22,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import com.google.gson.JsonObject;
 import com.kjstudios.aislehiringchallenge.R;
+import com.kjstudios.aislehiringchallenge.data.UserPreferences;
 import com.kjstudios.aislehiringchallenge.data.remote.RetrofitClient;
 import com.kjstudios.aislehiringchallenge.ui.phone_number.PhoneNumberFragmentDirections;
 
@@ -98,21 +100,23 @@ public class OtpFragment extends Fragment {
 
         continue_otp.setOnClickListener(v -> {
             continue_otp.setEnabled(false);
-            Call<ResponseBody> call = RetrofitClient
+            Call<JsonObject> call = RetrofitClient
                     .getInstance()
                     .getApiEndpoint()
                     .verifyOtp((countryCode + phoneNumber) , otp_et.getText().toString());
 
-            call.enqueue(new Callback<ResponseBody>() {
+            call.enqueue(new Callback<JsonObject>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                     Toast.makeText(getContext(), "otp verified", Toast.LENGTH_SHORT).show();
+                    String token = response.body().get("token").getAsString();
+                    new UserPreferences(getContext()).addToken(token);
                     NavDirections action = OtpFragmentDirections.actionOtpFragmentToNotesFragment();
                     navController.navigate(action);
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                public void onFailure(Call<JsonObject> call, Throwable t) {
                     continue_otp.setEnabled(true);
                     Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                 }
