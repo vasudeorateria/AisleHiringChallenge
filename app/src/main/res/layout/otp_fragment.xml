@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingStart="30dp"
+    android:paddingTop="80dp"
+    tools:context=".ui.otp.OtpFragment">
+
+    <TextView
+        android:id="@+id/phone_number_otp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/edit"
+        android:fontFamily="@font/gilroy_semi_bold"
+        android:gravity="center"
+        android:text="+91 9562673169"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/gilroy_extra_bold"
+        android:text="Enter the\nOTP"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/otp_et"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/textview_shape"
+        android:fontFamily="@font/gilroy_extra_bold"
+        android:gravity="center"
+        android:hint="9999"
+        android:inputType="phone"
+        android:maxLength="4"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/continue_otp"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.5"
+            android:enabled="false"
+            android:text="Continue"
+            android:textColor="@color/black" />
+
+        <Chronometer
+            android:id="@+id/otp_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:countDown="true"
+            android:fontFamily="@font/gilroy_extra_bold" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -3,7 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/drawable-anydpi/edit.xml" value="0.184" />
+        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/drawable/button_shape.xml" value="0.1395" />
+        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/drawable/textview_shape.xml" value="0.105" />
         <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/layout/activity_main.xml" value="0.10552536231884058" />
+        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/layout/notes_fragment.xml" value="0.1" />
+        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/layout/otp_fragment.xml" value="0.8193384223918575" />
+        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/layout/phone_number_fragment.xml" value="0.33" />
       </map>
     </option>
   </component>
