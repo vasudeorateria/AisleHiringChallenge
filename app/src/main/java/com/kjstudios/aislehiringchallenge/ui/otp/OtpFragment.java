@@ -1,5 +1,6 @@
 package com.kjstudios.aislehiringchallenge.ui.otp;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +23,13 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.kjstudios.aislehiringchallenge.R;
+import com.kjstudios.aislehiringchallenge.data.remote.RetrofitClient;
+import com.kjstudios.aislehiringchallenge.ui.phone_number.PhoneNumberFragmentDirections;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OtpFragment extends Fragment {
 
@@ -53,8 +62,9 @@ public class OtpFragment extends Fragment {
         Button continue_otp = view.findViewById(R.id.continue_otp);
         Chronometer otp_timer = view.findViewById(R.id.otp_timer);
 
-        String phone_number = OtpFragmentArgs.fromBundle(getArguments()).getPhoneNumber();
-        phone_number_otp.setText(phone_number);
+        String countryCode = OtpFragmentArgs.fromBundle(getArguments()).getCountryCode();
+        String phoneNumber = OtpFragmentArgs.fromBundle(getArguments()).getPhoneNumber();
+        phone_number_otp.setText(countryCode+" "+phoneNumber);
         phone_number_otp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,15 +96,27 @@ public class OtpFragment extends Fragment {
             }
         });
 
-        continue_otp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // make network call to verify otp
-                // get auth_token and save it in sharedPrefs
-                // navigate to main screen
-                NavDirections action = OtpFragmentDirections.actionOtpFragmentToNotesFragment();
-                navController.navigate(action);
-            }
+        continue_otp.setOnClickListener(v -> {
+            continue_otp.setEnabled(false);
+            Call<ResponseBody> call = RetrofitClient
+                    .getInstance()
+                    .getApiEndpoint()
+                    .verifyOtp((countryCode + phoneNumber) , otp_et.getText().toString());
+
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Toast.makeText(getContext(), "otp verified", Toast.LENGTH_SHORT).show();
+                    NavDirections action = OtpFragmentDirections.actionOtpFragmentToNotesFragment();
+                    navController.navigate(action);
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    continue_otp.setEnabled(true);
+                    Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
         });
 
         otp_timer.setBase(SystemClock.elapsedRealtime() + 60000);

@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +19,12 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.kjstudios.aislehiringchallenge.R;
+import com.kjstudios.aislehiringchallenge.data.remote.RetrofitClient;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PhoneNumberFragment extends Fragment {
 
@@ -42,10 +50,11 @@ public class PhoneNumberFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        EditText phone_number = view.findViewById(R.id.phone_number_et);
+        TextView countryCode_tv = view.findViewById(R.id.country_code_tv);
+        EditText phone_number_et = view.findViewById(R.id.phone_number_et);
         Button continue_phone_number = view.findViewById(R.id.continue_phone_number);
 
-        phone_number.addTextChangedListener(new TextWatcher() {
+        phone_number_et.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -68,14 +77,32 @@ public class PhoneNumberFragment extends Fragment {
             }
         });
 
-        continue_phone_number.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // make network call to send otp
-                NavDirections action =
-                        PhoneNumberFragmentDirections.actionPhoneNumberFragmentToOtpFragment(phone_number.getText().toString());
-                Navigation.findNavController(view).navigate(action);
-            }
+        continue_phone_number.setOnClickListener(v -> {
+            continue_phone_number.setEnabled(false);
+            String countryCode = countryCode_tv.getText().toString();
+            String phoneNumber = phone_number_et.getText().toString();
+
+            Call<ResponseBody> call = RetrofitClient
+                    .getInstance()
+                    .getApiEndpoint()
+                    .getOtp(countryCode + phoneNumber);
+
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Toast.makeText(getContext(), "otp sent", Toast.LENGTH_SHORT).show();
+                    NavDirections action = PhoneNumberFragmentDirections
+                            .actionPhoneNumberFragmentToOtpFragment(countryCode, phoneNumber);
+                    Navigation.findNavController(view).navigate(action);
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    continue_phone_number.setEnabled(true);
+                    Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+
         });
     }
 }
