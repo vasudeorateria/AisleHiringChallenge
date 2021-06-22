@@ -1,4 +1,4 @@
-package com.kjstudios.aislehiringchallenge.data.model.java;
+package com.kjstudios.aislehiringchallenge.data.model;
 
 public class GeneralInformation {
     String first_name;

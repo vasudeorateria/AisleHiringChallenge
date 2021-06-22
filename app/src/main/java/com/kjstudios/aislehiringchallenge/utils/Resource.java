@@ -2,7 +2,7 @@ package com.kjstudios.aislehiringchallenge.utils;
 
 import androidx.annotation.NonNull;
 
-public abstract class Resource<T>{
+public abstract class Resource<T> {
     T data;
     Throwable throwable;
 
@@ -11,7 +11,7 @@ public abstract class Resource<T>{
         this.throwable = throwable;
     }
 
-    public static final class Success<T> extends Resource{
+    public static final class Success<T> extends Resource {
         @NonNull
         T data;
         Throwable throwable;
@@ -32,16 +32,17 @@ public abstract class Resource<T>{
         }
     }
 
-    public static final class Error<T> extends Resource{
+    public static final class Error<T> extends Resource {
         T data;
         @NonNull
         Throwable throwable;
 
-        public Error( T data, @NonNull Throwable throwable) {
+        public Error(T data, @NonNull Throwable throwable) {
             super(data, throwable);
             this.data = data;
             this.throwable = throwable;
         }
+
         public T getData() {
             return data;
         }
@@ -52,7 +53,7 @@ public abstract class Resource<T>{
         }
     }
 
-    public static final class Loading<T> extends Resource{
+    public static final class Loading<T> extends Resource {
         T data;
         Throwable throwable;
 
@@ -61,6 +62,7 @@ public abstract class Resource<T>{
             this.data = data;
             this.throwable = throwable;
         }
+
         public T getData() {
             return data;
         }

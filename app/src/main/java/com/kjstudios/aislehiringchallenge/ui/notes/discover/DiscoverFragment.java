@@ -20,25 +20,24 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.kjstudios.aislehiringchallenge.R;
 import com.kjstudios.aislehiringchallenge.data.UserPreferences;
-import com.kjstudios.aislehiringchallenge.data.model.java.InviteProfile;
-import com.kjstudios.aislehiringchallenge.data.model.java.Invites;
-import com.kjstudios.aislehiringchallenge.data.model.java.Likes;
-import com.kjstudios.aislehiringchallenge.data.model.java.Note;
-import com.kjstudios.aislehiringchallenge.data.model.java.Photo;
-import com.kjstudios.aislehiringchallenge.data.model.java.Profile;
+import com.kjstudios.aislehiringchallenge.data.model.InviteProfile;
+import com.kjstudios.aislehiringchallenge.data.model.Invites;
+import com.kjstudios.aislehiringchallenge.data.model.Likes;
+import com.kjstudios.aislehiringchallenge.data.model.Note;
+import com.kjstudios.aislehiringchallenge.data.model.Photo;
+import com.kjstudios.aislehiringchallenge.data.model.Profile;
 import com.kjstudios.aislehiringchallenge.utils.Resource;
 
 import java.util.List;
 
 public class DiscoverFragment extends Fragment {
 
+    ShapeableImageView profile_image;
+    TextView profileDetails, profileAction;
     private DiscoverViewModel mViewModel;
-
     private ConstraintLayout invites_layout;
     private RelativeLayout upgrade_layout;
     private RecyclerView likes_profile_rv;
-    ShapeableImageView profile_image;
-    TextView profileDetails, profileAction;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

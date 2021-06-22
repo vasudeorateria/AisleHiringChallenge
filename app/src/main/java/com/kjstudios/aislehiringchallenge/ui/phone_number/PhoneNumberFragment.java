@@ -20,21 +20,12 @@ import androidx.navigation.Navigation;
 
 import com.google.gson.JsonObject;
 import com.kjstudios.aislehiringchallenge.R;
-import com.kjstudios.aislehiringchallenge.data.UserPreferences;
-import com.kjstudios.aislehiringchallenge.data.remote.RetrofitClient;
-import com.kjstudios.aislehiringchallenge.ui.otp.OtpFragmentDirections;
 import com.kjstudios.aislehiringchallenge.utils.Resource;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PhoneNumberFragment extends Fragment {
 
     private PhoneNumberViewModel mViewModel;
-
-    private String countryCode , phoneNumber;
-
+    private String countryCode, phoneNumber;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -53,12 +44,10 @@ public class PhoneNumberFragment extends Fragment {
         phone_number_et.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -77,10 +66,10 @@ public class PhoneNumberFragment extends Fragment {
             continue_phone_number.setEnabled(false);
             countryCode = countryCode_tv.getText().toString();
             phoneNumber = phone_number_et.getText().toString();
-            mViewModel.sendOtp(countryCode , phoneNumber);
+            mViewModel.sendOtp(countryCode, phoneNumber);
         });
 
-        mViewModel.otp_send_status.observe(getViewLifecycleOwner() , result->{
+        mViewModel.otp_send_status.observe(getViewLifecycleOwner(), result -> {
             if (result instanceof Resource.Success) {
                 JsonObject data = ((Resource.Success<JsonObject>) result).getData();
                 boolean status = data.get("status").getAsBoolean();

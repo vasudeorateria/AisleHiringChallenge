@@ -1,4 +1,4 @@
-package com.kjstudios.aislehiringchallenge.data.model.java;
+package com.kjstudios.aislehiringchallenge.data.model;
 
 import java.util.List;
 

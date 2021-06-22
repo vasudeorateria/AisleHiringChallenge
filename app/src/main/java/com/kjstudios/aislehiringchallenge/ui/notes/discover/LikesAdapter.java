@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.kjstudios.aislehiringchallenge.R;
-import com.kjstudios.aislehiringchallenge.data.model.java.Profile;
+import com.kjstudios.aislehiringchallenge.data.model.Profile;
 
 import java.util.ArrayList;
 import java.util.List;

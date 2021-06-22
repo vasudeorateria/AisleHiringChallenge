@@ -1,9 +1,9 @@
-package com.kjstudios.aislehiringchallenge.data.model.java;
+package com.kjstudios.aislehiringchallenge.data.model;
 
 import java.util.List;
 
 public class Invites {
-    int pending_invitations_count , totalPages;
+    int pending_invitations_count, totalPages;
     List<InviteProfile> profiles;
 
     public Invites(int pending_invitations_count, int totalPages, List<InviteProfile> profiles) {

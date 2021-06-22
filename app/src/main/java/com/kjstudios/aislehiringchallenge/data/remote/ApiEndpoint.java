@@ -1,7 +1,7 @@
 package com.kjstudios.aislehiringchallenge.data.remote;
 
 import com.google.gson.JsonObject;
-import com.kjstudios.aislehiringchallenge.data.model.java.Note;
+import com.kjstudios.aislehiringchallenge.data.model.Note;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
