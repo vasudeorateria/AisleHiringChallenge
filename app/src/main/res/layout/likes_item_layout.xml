@@ -14,16 +14,16 @@
         android:src="@drawable/photo_2"
         app:layout_constraintDimensionRatio="1:1.5"
         app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/RoundedCorner"
-        tools:layout_editor_absoluteX="107dp" />
+        app:shapeAppearanceOverlay="@style/RoundedCorner" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="200dp"
         android:background="@drawable/gradient_background"
-        app:layout_constraintBottom_toBottomOf="@+id/like_image"
-        tools:layout_editor_absoluteX="4dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/like_image" />
+
     <TextView
+        android:id="@+id/like_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/gilroy_extra_bold"

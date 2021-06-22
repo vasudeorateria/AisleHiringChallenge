@@ -1,11 +1,15 @@
 package com.kjstudios.aislehiringchallenge.data.model.java;
 
+import java.util.List;
+
 public class Invites {
     int pending_invitations_count , totalPages;
+    List<InviteProfile> profiles;
 
-    public Invites(int pending_invitations_count, int totalPages) {
+    public Invites(int pending_invitations_count, int totalPages, List<InviteProfile> profiles) {
         this.pending_invitations_count = pending_invitations_count;
         this.totalPages = totalPages;
+        this.profiles = profiles;
     }
 
     public int getPending_invitations_count() {
@@ -22,5 +26,13 @@ public class Invites {
 
     public void setTotalPages(int totalPages) {
         this.totalPages = totalPages;
+    }
+
+    public List<InviteProfile> getProfiles() {
+        return profiles;
+    }
+
+    public void setProfiles(List<InviteProfile> profiles) {
+        this.profiles = profiles;
     }
 }

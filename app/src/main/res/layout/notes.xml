@@ -22,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:padding="8dp"
         app:itemIconTint="@color/bottom_navbar_color"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu" />

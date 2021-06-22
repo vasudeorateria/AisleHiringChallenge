@@ -1,11 +1,12 @@
 package com.kjstudios.aislehiringchallenge.ui.notes;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,16 +15,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.kjstudios.aislehiringchallenge.R;
-import com.kjstudios.aislehiringchallenge.data.UserPreferences;
-import com.kjstudios.aislehiringchallenge.data.model.java.Likes;
-import com.kjstudios.aislehiringchallenge.data.model.java.Note;
-import com.kjstudios.aislehiringchallenge.data.remote.RetrofitClient;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class Notes extends Fragment {
 
@@ -43,24 +37,23 @@ public class Notes extends Fragment {
         NavHostFragment navHostFragment =
                 (NavHostFragment) getChildFragmentManager().findFragmentById(R.id.bottom_navbar_navhost);
         NavController navController = navHostFragment.getNavController();
-        NavigationUI.setupWithNavController(bottomNavigationView , navController);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-        Call<Note> call = RetrofitClient
-                .getInstance()
-                .getApiEndpoint()
-                .getProfileList(new UserPreferences(getContext()).getToken());
-
-        call.enqueue(new Callback<Note>() {
+        bottomNavigationView.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
             @Override
-            public void onResponse(Call<Note> call, Response<Note> response) {
-                Toast.makeText(getContext(), "get profile list success", Toast.LENGTH_SHORT).show();
-                Likes likes = response.body().getLikes();
-            }
-
-            @Override
-            public void onFailure(Call<Note> call, Throwable t) {
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
             }
         });
+
+        BadgeDrawable notesFragmentBadge = bottomNavigationView.getOrCreateBadge(R.id.notesFragment);
+        BadgeDrawable matchesFragmentBadge = bottomNavigationView.getOrCreateBadge(R.id.matchesFragment);
+
+        notesFragmentBadge.setNumber(9);
+        matchesFragmentBadge.setMaxCharacterCount(3);
+        notesFragmentBadge.setBackgroundColor(R.drawable.badge_shape);
+
+        matchesFragmentBadge.setNumber(50);
+        matchesFragmentBadge.setMaxCharacterCount(3);
+        matchesFragmentBadge.setBackgroundColor(R.drawable.badge_shape);
     }
 }

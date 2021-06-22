@@ -6,6 +6,7 @@ data class Profile(
     val has_active_subscription: Boolean,
     val icebreakers: Any,
     val instagram_images: Any,
+
     val is_facebook_data_fetched: Boolean,
     val last_seen: String,
     val last_seen_window: String,
