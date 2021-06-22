@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_nav_bar"
+    android:label="Bottom Nav Bar"
+    app:startDestination="@id/discoverFragment">
+
+    <fragment
+        android:id="@+id/discoverFragment"
+        android:name="com.kjstudios.aislehiringchallenge.ui.notes.discover.DiscoverFragment"
+        android:label="discover_fragment"
+        tools:layout="@layout/discover_fragment" />
+    <fragment
+        android:id="@+id/matchesFragment"
+        android:name="com.kjstudios.aislehiringchallenge.ui.notes.matches.MatchesFragment"
+        android:label="matches_fragment"
+        tools:layout="@layout/matches_fragment" />
+    <fragment
+        android:id="@+id/notesFragment"
+        android:name="com.kjstudios.aislehiringchallenge.ui.notes.notes.NotesFragment"
+        android:label="notes_fragment"
+        tools:layout="@layout/notes_fragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.kjstudios.aislehiringchallenge.ui.notes.profile.ProfileFragment"
+        android:label="profile_fragment"
+        tools:layout="@layout/profile_fragment" />
+</navigation>

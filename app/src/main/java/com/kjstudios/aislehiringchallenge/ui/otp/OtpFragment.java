@@ -111,7 +111,7 @@ public class OtpFragment extends Fragment {
                     Toast.makeText(getContext(), "otp verified", Toast.LENGTH_SHORT).show();
                     String token = response.body().get("token").getAsString();
                     new UserPreferences(getContext()).addToken(token);
-                    NavDirections action = OtpFragmentDirections.actionOtpFragmentToNotesFragment();
+                    NavDirections action = OtpFragmentDirections.actionOtpFragmentToNotes();
                     navController.navigate(action);
                 }
 

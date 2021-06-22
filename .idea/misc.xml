@@ -4,12 +4,19 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/drawable-anydpi/edit.xml" value="0.184" />
+        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/drawable/bottom_nav_bar_selector.xml" value="0.1965" />
         <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/drawable/button_shape.xml" value="0.1395" />
+        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/drawable/gradient_background.xml" value="0.178" />
         <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/drawable/textview_shape.xml" value="0.105" />
         <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/layout/activity_main.xml" value="0.10552536231884058" />
-        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/layout/notes_fragment.xml" value="0.1" />
+        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/layout/discover_fragment.xml" value="0.25" />
+        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/layout/likes_item_layout.xml" value="0.25" />
+        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/layout/notes.xml" value="0.1" />
+        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/layout/notes_fragment.xml" value="0.10483870967741936" />
+        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/layout/notes_fragment2.xml" value="0.18177083333333333" />
         <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/layout/otp_fragment.xml" value="0.8193384223918575" />
         <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/layout/phone_number_fragment.xml" value="0.33" />
+        <entry key="..\:/My Apps/Hiring Challenge/AisleHiringChallenge/app/src/main/res/menu/bottom_nav_menu.xml" value="0.18854166666666666" />
       </map>
     </option>
   </component>

@@ -1,12 +1,11 @@
 package com.kjstudios.aislehiringchallenge;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-
-import android.os.Bundle;
 
 import com.kjstudios.aislehiringchallenge.data.UserPreferences;
 
@@ -19,12 +18,12 @@ public class MainActivity extends AppCompatActivity {
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         NavController navController = navHostFragment.getNavController();
-        NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.nav_graph);
+        NavGraph navGraph = navController.getGraph();
 
         String token = new UserPreferences(this).getToken();
-        if(token!=null){
-            navGraph.setStartDestination(R.id.notesFragment);
+        if (token == null) {
+            navGraph.setStartDestination(R.id.phoneNumberFragment);
+            navController.setGraph(navGraph);
         }
-        navController.setGraph(navGraph);
     }
 }
