@@ -26,6 +26,7 @@ public class PhoneNumberFragment extends Fragment {
 
     private PhoneNumberViewModel mViewModel;
     private String countryCode, phoneNumber;
+    boolean navigateForward = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -64,6 +65,7 @@ public class PhoneNumberFragment extends Fragment {
 
         continue_phone_number.setOnClickListener(v -> {
             continue_phone_number.setEnabled(false);
+            navigateForward = true;
             countryCode = countryCode_tv.getText().toString();
             phoneNumber = phone_number_et.getText().toString();
             mViewModel.sendOtp(countryCode, phoneNumber);
@@ -73,12 +75,14 @@ public class PhoneNumberFragment extends Fragment {
             if (result instanceof Resource.Success) {
                 JsonObject data = ((Resource.Success<JsonObject>) result).getData();
                 boolean status = data.get("status").getAsBoolean();
-
                 if (status) {
-                    Toast.makeText(getContext(), "otp sent", Toast.LENGTH_SHORT).show();
-                    NavDirections action = PhoneNumberFragmentDirections
-                            .actionPhoneNumberFragmentToOtpFragment(countryCode, phoneNumber);
-                    Navigation.findNavController(view).navigate(action);
+                    if(navigateForward) {
+                        navigateForward = false;
+                        Toast.makeText(getContext(), "otp sent", Toast.LENGTH_SHORT).show();
+                        NavDirections action = PhoneNumberFragmentDirections
+                                .actionPhoneNumberFragmentToOtpFragment(countryCode, phoneNumber);
+                        Navigation.findNavController(view).navigate(action);
+                    }
                 } else {
                     continue_phone_number.setEnabled(true);
                     Toast.makeText(getContext(), "unable to send otp", Toast.LENGTH_SHORT).show();

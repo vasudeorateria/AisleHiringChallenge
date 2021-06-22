@@ -30,6 +30,11 @@ public class OtpFragment extends Fragment {
 
     private OtpViewModel mViewModel;
 
+    private TextView phone_number_otp, resend_otp;
+    Chronometer otp_timer;
+    EditText otp_et;
+    Button continue_otp;
+
     public static OtpFragment newInstance() {
         return new OtpFragment();
     }
@@ -46,20 +51,16 @@ public class OtpFragment extends Fragment {
 
         NavController navController = Navigation.findNavController(view);
 
-        TextView phone_number_otp = view.findViewById(R.id.phone_number_otp);
-        EditText otp_et = view.findViewById(R.id.otp_et);
-        Button continue_otp = view.findViewById(R.id.continue_otp);
-        Chronometer otp_timer = view.findViewById(R.id.otp_timer);
+        phone_number_otp = view.findViewById(R.id.phone_number_otp);
+        otp_et = view.findViewById(R.id.otp_et);
+        continue_otp = view.findViewById(R.id.continue_otp);
+        otp_timer = view.findViewById(R.id.otp_timer);
+        resend_otp = view.findViewById(R.id.resendOTP);
 
         String countryCode = OtpFragmentArgs.fromBundle(getArguments()).getCountryCode();
         String phoneNumber = OtpFragmentArgs.fromBundle(getArguments()).getPhoneNumber();
         phone_number_otp.setText(countryCode + " " + phoneNumber);
-        phone_number_otp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController.navigateUp();
-            }
-        });
+        phone_number_otp.setOnClickListener(v -> navController.popBackStack());
 
         otp_et.addTextChangedListener(new TextWatcher() {
             @Override
@@ -106,10 +107,29 @@ public class OtpFragment extends Fragment {
                 // loading
             }
         });
+        startTimer();
+        otp_timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                if (SystemClock.elapsedRealtime() >= chronometer.getBase()) {
+                    otp_timer.stop();
+                    otp_timer.setVisibility(View.GONE);
+                    resend_otp.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
+        resend_otp.setOnClickListener(v -> {
+            otp_timer.setVisibility(View.VISIBLE);
+            resend_otp.setVisibility(View.GONE);
+            startTimer();
+        });
+
+    }
+
+    void startTimer() {
         otp_timer.setBase(SystemClock.elapsedRealtime() + 60000);
         otp_timer.start();
-
     }
 
 }
