@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.kjstudios.aislehiringchallenge.data.UserPreferences;
 import com.kjstudios.aislehiringchallenge.data.model.java.Note;
@@ -15,20 +16,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DiscoverViewModel extends AndroidViewModel {
-
-    public DiscoverViewModel(@NonNull Application application) {
-        super(application);
-        getNotes();
-    }
+public class DiscoverViewModel extends ViewModel {
 
     final MutableLiveData notes = new MutableLiveData<Resource>();
 
-    void getNotes() {
+    void getNotes(String token) {
         Call<Note> call = RetrofitClient
                 .getInstance()
                 .getApiEndpoint()
-                .getProfileList(new UserPreferences(getApplication().getApplicationContext()).getToken());
+                .getProfileList(token);
 
         call.enqueue(new Callback<Note>() {
             @Override
@@ -36,13 +32,13 @@ public class DiscoverViewModel extends AndroidViewModel {
                 if (response.isSuccessful()) {
                     notes.setValue(new Resource.Success(response.body(), null));
                 }else{
-                    notes.setValue(new Resource.Error(response.errorBody() , null));
+                    notes.setValue(new Resource.Error(null , new Throwable()));
                 }
             }
 
             @Override
             public void onFailure(Call<Note> call, Throwable t) {
-                new Resource.Error(null, t);
+                notes.setValue(new Resource.Error(null, t));
             }
         });
     }

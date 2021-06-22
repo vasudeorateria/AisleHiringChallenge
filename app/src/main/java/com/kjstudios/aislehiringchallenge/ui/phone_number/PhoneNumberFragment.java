@@ -20,7 +20,10 @@ import androidx.navigation.Navigation;
 
 import com.google.gson.JsonObject;
 import com.kjstudios.aislehiringchallenge.R;
+import com.kjstudios.aislehiringchallenge.data.UserPreferences;
 import com.kjstudios.aislehiringchallenge.data.remote.RetrofitClient;
+import com.kjstudios.aislehiringchallenge.ui.otp.OtpFragmentDirections;
+import com.kjstudios.aislehiringchallenge.utils.Resource;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,21 +33,14 @@ public class PhoneNumberFragment extends Fragment {
 
     private PhoneNumberViewModel mViewModel;
 
-    public static PhoneNumberFragment newInstance() {
-        return new PhoneNumberFragment();
-    }
+    private String countryCode , phoneNumber;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.phone_number_fragment, container, false);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(PhoneNumberViewModel.class);
-        // TODO: Use the ViewModel
+        return inflater.inflate(R.layout.phone_number_fragment, container, false);
     }
 
     @Override
@@ -79,35 +75,32 @@ public class PhoneNumberFragment extends Fragment {
 
         continue_phone_number.setOnClickListener(v -> {
             continue_phone_number.setEnabled(false);
-            String countryCode = countryCode_tv.getText().toString();
-            String phoneNumber = phone_number_et.getText().toString();
+            countryCode = countryCode_tv.getText().toString();
+            phoneNumber = phone_number_et.getText().toString();
+            mViewModel.sendOtp(countryCode , phoneNumber);
+        });
 
-            Call<JsonObject> call = RetrofitClient
-                    .getInstance()
-                    .getApiEndpoint()
-                    .getOtp(countryCode + phoneNumber);
+        mViewModel.otp_send_status.observe(getViewLifecycleOwner() , result->{
+            if (result instanceof Resource.Success) {
+                JsonObject data = ((Resource.Success<JsonObject>) result).getData();
+                boolean status = data.get("status").getAsBoolean();
 
-            call.enqueue(new Callback<JsonObject>() {
-                @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    boolean status = response.body().get("status").getAsBoolean();
-                    if (status) {
-                        Toast.makeText(getContext(), "otp sent", Toast.LENGTH_SHORT).show();
-                        NavDirections action = PhoneNumberFragmentDirections
-                                .actionPhoneNumberFragmentToOtpFragment(countryCode, phoneNumber);
-                        Navigation.findNavController(view).navigate(action);
-                    } else {
-                        Toast.makeText(getContext(), "unable to send otp", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
+                if (status) {
+                    Toast.makeText(getContext(), "otp sent", Toast.LENGTH_SHORT).show();
+                    NavDirections action = PhoneNumberFragmentDirections
+                            .actionPhoneNumberFragmentToOtpFragment(countryCode, phoneNumber);
+                    Navigation.findNavController(view).navigate(action);
+                } else {
                     continue_phone_number.setEnabled(true);
-                    Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "unable to send otp", Toast.LENGTH_SHORT).show();
                 }
-            });
 
+            } else if (result instanceof Resource.Error) {
+                continue_phone_number.setEnabled(true);
+                Toast.makeText(getContext(), "Unable to send otp at the momment", Toast.LENGTH_SHORT).show();
+            } else {
+                // loading
+            }
         });
     }
 }

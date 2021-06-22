@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,14 +26,9 @@ import com.kjstudios.aislehiringchallenge.data.model.java.Likes;
 import com.kjstudios.aislehiringchallenge.data.model.java.Note;
 import com.kjstudios.aislehiringchallenge.data.model.java.Photo;
 import com.kjstudios.aislehiringchallenge.data.model.java.Profile;
-import com.kjstudios.aislehiringchallenge.data.remote.RetrofitClient;
 import com.kjstudios.aislehiringchallenge.utils.Resource;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class DiscoverFragment extends Fragment {
 
@@ -49,13 +43,12 @@ public class DiscoverFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        mViewModel = new ViewModelProvider(requireActivity()).get(DiscoverViewModel.class);
         return inflater.inflate(R.layout.discover_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        mViewModel = new ViewModelProvider(requireActivity()).get(DiscoverViewModel.class);
 
         invites_layout = view.findViewById(R.id.invites_layout);
         profile_image = view.findViewById(R.id.profileImage);
@@ -64,15 +57,22 @@ public class DiscoverFragment extends Fragment {
         upgrade_layout = view.findViewById(R.id.upgrade_layout);
         likes_profile_rv = view.findViewById(R.id.profileLikes_rv);
 
+        String token = new UserPreferences(getContext()).getToken();
+        if (token != null) {
+            mViewModel.getNotes(token);
+        }
+
         mViewModel.notes.observe(getViewLifecycleOwner(), result -> {
-            if(result instanceof Resource.Success){
+            if (result instanceof Resource.Success) {
                 Note data = ((Resource.Success<Note>) result).getData();
                 Likes likes = data.getLikes();
                 Invites invites = data.getInvites();
-                setProfileLikeRv(likes.getProfiles() , likes.isCan_see_profile());
+                setProfileLikeRv(likes.getProfiles(), likes.isCan_see_profile());
                 setProfileInvites(invites);
-            }else if(result instanceof Resource.Error){
+            } else if (result instanceof Resource.Error) {
                 Toast.makeText(getContext(), "Unable to get details at the momment", Toast.LENGTH_SHORT).show();
+            } else {
+                // loading
             }
         });
 

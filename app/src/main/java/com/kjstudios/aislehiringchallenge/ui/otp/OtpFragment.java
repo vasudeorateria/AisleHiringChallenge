@@ -1,6 +1,5 @@
 package com.kjstudios.aislehiringchallenge.ui.otp;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -25,13 +24,7 @@ import androidx.navigation.Navigation;
 import com.google.gson.JsonObject;
 import com.kjstudios.aislehiringchallenge.R;
 import com.kjstudios.aislehiringchallenge.data.UserPreferences;
-import com.kjstudios.aislehiringchallenge.data.remote.RetrofitClient;
-import com.kjstudios.aislehiringchallenge.ui.phone_number.PhoneNumberFragmentDirections;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.kjstudios.aislehiringchallenge.utils.Resource;
 
 public class OtpFragment extends Fragment {
 
@@ -44,14 +37,8 @@ public class OtpFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.otp_fragment, container, false);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(OtpViewModel.class);
-        // TODO: Use the ViewModel
+        return inflater.inflate(R.layout.otp_fragment, container, false);
     }
 
     @Override
@@ -66,7 +53,7 @@ public class OtpFragment extends Fragment {
 
         String countryCode = OtpFragmentArgs.fromBundle(getArguments()).getCountryCode();
         String phoneNumber = OtpFragmentArgs.fromBundle(getArguments()).getPhoneNumber();
-        phone_number_otp.setText(countryCode+" "+phoneNumber);
+        phone_number_otp.setText(countryCode + " " + phoneNumber);
         phone_number_otp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,27 +87,24 @@ public class OtpFragment extends Fragment {
 
         continue_otp.setOnClickListener(v -> {
             continue_otp.setEnabled(false);
-            Call<JsonObject> call = RetrofitClient
-                    .getInstance()
-                    .getApiEndpoint()
-                    .verifyOtp((countryCode + phoneNumber) , otp_et.getText().toString());
+            mViewModel.verifyOtp(countryCode, phoneNumber, otp_et.getText().toString());
+        });
 
-            call.enqueue(new Callback<JsonObject>() {
-                @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    Toast.makeText(getContext(), "otp verified", Toast.LENGTH_SHORT).show();
-                    String token = response.body().get("token").getAsString();
-                    new UserPreferences(getContext()).addToken(token);
-                    NavDirections action = OtpFragmentDirections.actionOtpFragmentToNotes();
-                    navController.navigate(action);
-                }
+        mViewModel.otp_verify_status.observe(getViewLifecycleOwner(), result -> {
+            if (result instanceof Resource.Success) {
+                JsonObject data = ((Resource.Success<JsonObject>) result).getData();
+                String token = data.get("token").getAsString();
+                new UserPreferences(getContext()).addToken(token);
 
-                @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
-                    continue_otp.setEnabled(true);
-                    Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
+                Toast.makeText(getContext(), "otp verified", Toast.LENGTH_SHORT).show();
+                NavDirections action = OtpFragmentDirections.actionOtpFragmentToNotes();
+                navController.navigate(action);
+            } else if (result instanceof Resource.Error) {
+                continue_otp.setEnabled(true);
+                Toast.makeText(getContext(), "Unable to verify otp at the momment", Toast.LENGTH_SHORT).show();
+            } else {
+                // loading
+            }
         });
 
         otp_timer.setBase(SystemClock.elapsedRealtime() + 60000);
